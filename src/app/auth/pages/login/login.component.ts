@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 //
 import Swal from 'sweetalert2';
+import { AuthResponse } from '../../interfaces/interface';
 
 @Component({
   selector: 'app-login',
@@ -36,6 +37,7 @@ export class LoginComponent implements OnInit {
     // Extract Email & Password from myAuthForm Value
     const { email, password } = this.myAuthForm.value;
     this.authService.login(email, password).subscribe((ok) => {
+      console.log(ok);
       if (ok === true) {
         this.router.navigateByUrl('/dashboard');
       } else {

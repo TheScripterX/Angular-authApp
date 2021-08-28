@@ -21,16 +21,28 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
+  register(name: string, email: string, password: string) {
+    const url = `${this.baseUrl}/auth/new`;
+    const body = { name, email, password };
+    return this.http.post<AuthResponse>(url, body).pipe(
+      tap((res) => {
+        if (res.ok) {
+          sessionStorage.setItem('token', res.token!);
+        }
+      }),
+      map((res) => res.ok),
+      catchError((err) => of(err.error.msg))
+    );
+  }
+
   login(email: string, password: string) {
     const url = `${this.baseUrl}/auth`;
     const body = { email, password };
     return this.http.post<AuthResponse>(url, body).pipe(
       tap((res) => {
-        sessionStorage.setItem('token', res.token!);
-        this._User = {
-          uid: res.uid!,
-          name: res.name!,
-        };
+        if (res.ok) {
+          sessionStorage.setItem('token', res.token!);
+        }
       }),
       map((res) => res.ok),
       catchError((err) => of(err.error.msg))
@@ -49,10 +61,15 @@ export class AuthService {
         this._User = {
           uid: res.uid!,
           name: res.name!,
+          email: res.email!,
         };
         return res.ok;
       }),
       catchError((err) => of(false))
     );
+  }
+
+  logout() {
+    sessionStorage.removeItem('token');
   }
 }

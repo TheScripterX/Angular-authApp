@@ -2,7 +2,7 @@
   class="login100-form"
   autocomplete="off"
   [formGroup]="myAuthForm"
-  (ngSubmit)="save()"
+  (ngSubmit)="register()"
 >
   <span class="login100-form-title p-b-49"> New user </span>
 
@@ -47,7 +47,6 @@
       <button
         type="submit"
         class="login100-form-btn"
-        (click)="save()"
         [disabled]="myAuthForm.invalid"
       >
         Register
